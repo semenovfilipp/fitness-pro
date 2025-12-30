@@ -1,16 +1,123 @@
-# test_flutter
+# Fitness Pro
 
-A new Flutter project.
+Простое Flutter-приложение с онбордингом, paywall и контентом для демонстрации базового флоу мобильного приложения с подпиской.
 
-## Getting Started
+## 🎥 Демонстрация
 
-This project is a starting point for a Flutter application.
+<p align="center">
+  <img src="demo.gif" alt="Fitness Pro Demo" width="300"/>
+</p>
 
-A few resources to get you started if this is your first Flutter project:
+## 📱 О проекте
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+**Fitness Pro** - это демонстрационное приложение для тренировок, созданное как тестовое задание. Приложение включает:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- 🎯 Онбординг (приветственный экран)
+- 💳 Paywall с выбором тарифа подписки (Месяц/Год)
+- 🏋️ Главный экран со списком из 10 тренировок
+- 📋 Детальные страницы для каждой тренировки
+- 💾 Сохранение статуса подписки (SharedPreferences)
+- 🔄 Возможность сброса подписки для тестирования
+
+## 🏗️ Архитектура
+
+Проект организован по принципу разделения на слои:
+
+```
+lib/
+├── main.dart                      # Точка входа приложения
+├── models/                        # Модели данных
+│   └── workout.dart               # Модель тренировки с enum'ами
+├── screen/                        # Экраны приложения
+│   ├── onboarding_screen.dart     # Онбординг
+│   ├── paywall_screen.dart        # Экран подписки
+│   ├── home_screen.dart           # Главный экран со списком
+│   └── workout_detail_screen.dart # Детали тренировки
+└── service/                       # Бизнес-логика
+    └── subscription_storage.dart  # Работа с подпиской
+```
+
+### Ключевые решения:
+
+- **State Management**: Простой StatefulWidget для минимальной локальной логики
+- **Navigation**: Стандартный Navigator с MaterialPageRoute
+- **Data Persistence**: SharedPreferences для хранения статуса подписки
+- **UI**: Material Design 3 с кастомной цветовой схемой (deepOrange)
+
+## 🚀 Запуск проекта
+
+### Требования:
+- Flutter SDK (>=3.0.0)
+- Dart SDK
+
+### Установка и запуск:
+
+```bash
+# Клонировать репозиторий
+git clone <repo-url>
+cd test_flutter
+
+# Установить зависимости
+flutter pub get
+
+# Запустить на эмуляторе/устройстве
+flutter run
+
+# Или запустить в web
+flutter run -d chrome
+```
+
+## 📦 Зависимости
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  shared_preferences: ^2.3.3  # Для сохранения подписки
+```
+
+## 🎨 Особенности UI
+
+### Онбординг
+- Иконка фитнеса
+- Приветственное сообщение
+- Кнопка "Продолжить"
+
+### Paywall
+- Список преимуществ подписки (4 пункта)
+- Два тарифа: Месяц (299₽) и Год (1999₽ со скидкой 44%)
+- Визуальная индикация выбранного плана
+- Кнопка покупки (эмуляция)
+
+### Главный экран
+- Список из 10 разных тренировок
+- Каждая карточка содержит:
+  - Иконка категории (Кардио/Сила/Растяжка/HIIT)
+  - Название тренировки
+  - Длительность в минутах
+  - Уровень сложности с цветовой индикацией:
+    - 🟢 Зеленый - Начинающий
+    - 🟠 Оранжевый - Средний
+    - 🔴 Красный - Продвинутый
+- Меню для сброса подписки (тестирование)
+
+### Детали тренировки
+- Большая иконка категории
+- Информационные карточки (время, уровень, калории)
+- Описание тренировки
+- Список упражнений с нумерацией
+- Кнопка "Начать тренировку"
+
+## 🔄 Флоу приложения
+
+```
+Запуск → Проверка подписки
+         ↓
+    Нет подписки? → Онбординг → Paywall → Покупка → Главный экран
+         ↓
+    Есть подписка? → Главный экран (сразу)
+                          ↓
+                   Клик на тренировку → Детали тренировки
+                          ↓
+                   Меню (⋮) → Сбросить подписку → Онбординг
+```
