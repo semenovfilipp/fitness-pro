@@ -1,8 +1,44 @@
 import 'package:flutter/material.dart';
 import '../models/workout.dart';
+import '../service/subscription_storage.dart';
+import 'workout_detail_screen.dart';
+import 'onboarding_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
+
+  void _showResetDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Сбросить подписку?'),
+        content: const Text(
+          'Вы уверены, что хотите отменить подписку? Приложение вернется к онбордингу.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Отмена'),
+          ),
+          TextButton(
+            onPressed: () async {
+              await SubscriptionStorage.unsubscribe();
+              if (!context.mounted) return;
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => const OnboardingScreen()),
+                (_) => false,
+              );
+            },
+            child: const Text(
+              'Сбросить',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +49,28 @@ class HomeScreen extends StatelessWidget {
         title: const Text('Fitness Pro'),
         backgroundColor: Colors.deepOrange,
         foregroundColor: Colors.white,
+        actions: [
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.more_vert),
+            onSelected: (value) {
+              if (value == 'reset') {
+                _showResetDialog(context);
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'reset',
+                child: Row(
+                  children: [
+                    Icon(Icons.logout, color: Colors.red),
+                    SizedBox(width: 8),
+                    Text('Сбросить подписку'),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
@@ -44,12 +102,21 @@ class _WorkoutCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => WorkoutDetailScreen(workout: workout),
+          ),
+        );
+      },
+      child: Card(
+        margin: const EdgeInsets.only(bottom: 12),
+        elevation: 2,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
           children: [
             // Иконка категории
             Container(
@@ -134,6 +201,7 @@ class _WorkoutCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }

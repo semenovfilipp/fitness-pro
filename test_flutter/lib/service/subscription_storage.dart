@@ -13,4 +13,9 @@ class SubscriptionStorage {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_key, true);
   }
+
+  static Future<void> unsubscribe() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_key, false);
+  }
 }
