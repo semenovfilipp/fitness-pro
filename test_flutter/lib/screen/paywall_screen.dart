@@ -15,11 +15,22 @@ class _PaywallScreenState extends State<PaywallScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Подписка')),
+      appBar: AppBar(title: const Text('Fitness Pro Premium')),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Text(
+              'Получите доступ ко всем тренировкам',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            _buildFeature('✓ Более 100 программ тренировок'),
+            _buildFeature('✓ Персональные планы'),
+            _buildFeature('✓ Отслеживание прогресса'),
+            _buildFeature('✓ Без рекламы'),
+            const SizedBox(height: 24),
             _planTile(
               title: 'Месяц',
               subtitle: '299 ₽ / месяц',
@@ -27,7 +38,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
             ),
             _planTile(
               title: 'Год',
-              subtitle: '1999 ₽ / год (скидка)',
+              subtitle: '1999 ₽ / год (скидка 44%)',
               value: 'year',
             ),
             const Spacer(),
@@ -39,7 +50,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
                   // Эмуляция покупки
                   await SubscriptionStorage.subscribe();
 
-                  if (!mounted) return;
+                  if (!context.mounted) return;
 
                   Navigator.pushAndRemoveUntil(
                     context,
@@ -57,18 +68,60 @@ class _PaywallScreenState extends State<PaywallScreen> {
     );
   }
 
+  Widget _buildFeature(String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Text(
+        text,
+        style: const TextStyle(fontSize: 16),
+      ),
+    );
+  }
+
   Widget _planTile({
     required String title,
     required String subtitle,
     required String value,
   }) {
-    return Card(
-      child: RadioListTile<String>(
-        title: Text(title),
-        subtitle: Text(subtitle),
-        value: value,
-        groupValue: selectedPlan,
-        onChanged: (v) => setState(() => selectedPlan = v!),
+    final isSelected = selectedPlan == value;
+    return InkWell(
+      onTap: () => setState(() => selectedPlan = value),
+      child: Card(
+        color: isSelected ? Colors.deepOrange.withValues(alpha: 0.1) : null,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Icon(
+                isSelected ? Icons.check_circle : Icons.circle_outlined,
+                color: isSelected ? Colors.deepOrange : Colors.grey,
+                size: 28,
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

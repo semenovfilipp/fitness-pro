@@ -20,7 +20,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Fitness Pro',
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.deepOrange,
+        useMaterial3: true,
+      ),
       home: isSubscribed ? const HomeScreen() : const OnboardingScreen(),
     );
   }

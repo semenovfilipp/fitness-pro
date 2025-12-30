@@ -12,16 +12,17 @@ class OnboardingScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.star, size: 100),
+            const Icon(Icons.fitness_center, size: 100, color: Colors.deepOrange),
             const SizedBox(height: 24),
             const Text(
-              'Добро пожаловать',
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+              'Fitness Pro',
+              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
             const Text(
-              'Пример приложения с подпиской.\nОнбординг → Paywall → Контент.',
+              'Тренируйтесь эффективно с персональными\nпрограммами тренировок',
               textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 40),
             SizedBox(
